@@ -1,0 +1,6 @@
+xmlFileName: adaboost.xml
+maxResidualError: 1.000000
+truePositiveNum: 861
+falseNegativeNum: 139
+trueNegativeNum: 814
+falsePositiveNum: 186

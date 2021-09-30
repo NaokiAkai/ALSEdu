@@ -1,0 +1,4 @@
+xmlFileName: mlp.xml
+maxResidualError: 1.000000
+positivePredictsFileName: positive_predicts.txt
+negativePredictsFileName: negative_predicts.txt

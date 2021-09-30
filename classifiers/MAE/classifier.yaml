@@ -1,0 +1,16 @@
+maxResidualError: 1.000000
+failureThreshold: 0.228795
+successMAEMean: 0.152304
+successMAEStd: 0.051138
+failureMAEMean: 0.305286
+failureMAEStd: 0.091309
+truePositiveNum: 924
+falseNegativeNum: 76
+trueNegativeNum: 760
+falsePositiveNum: 240
+positiveMAEsFileName: positive_maes.txt
+negativeMAEsFileName: negative_maes.txt
+truePositiveMAEsFileName: true_positive_maes.txt
+trueNegativeMAEsFileName: true_negative_maes.txt
+falsePositiveMAEsFileName: false_positive_maes.txt
+falseNegativeMAEsFileName: false_negative_maes.txt

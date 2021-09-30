@@ -1,0 +1,23 @@
+#! /bin/gnuplot
+
+set colors classic
+set size ratio 1 1
+set xlabel "Reliability"
+set ylabel "Predicted value"
+set cblabel "Likelihood"
+set title font "Arial, 12"
+set key font "Arial, 12"
+set tics font "Arial, 12"
+set xlabel font "Arial, 12"
+set ylabel font "Arial, 12"
+set cblabel font "Arial, 12"
+set pm3d map interpolate 5, 5
+
+set xrange [ 0.0 : 1.0 ]
+set yrange [ 0.0 : 1.0 ]
+
+unset key
+unset grid
+
+splot "mlp_decision_likelihoods.txt" with pm3d t ""
+pause -1
