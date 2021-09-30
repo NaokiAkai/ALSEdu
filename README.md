@@ -22,7 +22,7 @@ C++を用いて開発されています。Ubuntu 18.04と20.04で動作するこ
 
 C++の開発環境を構築した後に、CMake、yaml-cpp、gnuplotおよびOpenCVをインストールしてください（書籍内では、Versionは4.2.0のOpenCVを使用しています）。これらのインストール方法は、ここでは割愛します。
 
-ALEEduは以下の様にインストール、コンパイルしてください。
+ALSEduは以下の様にインストール、コンパイルしてください。
 
 ~~~
 $ git clone https://github.com/NaokiAkai/ALSEdu.git
