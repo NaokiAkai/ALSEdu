@@ -80,7 +80,7 @@ public:
 
     inline double getReliability(void) { return reliabilities_[getMaxLikelihoodParticleIdx()]; }
 
-    // 動作モデルによるパーティクスの更新と信頼度遷移モデルによる信頼度の更新
+    // 動作モデルによるパーティクルの更新と信頼度遷移モデルによる信頼度の更新
     void updateParticlesAndReliability(double deltaDist, double deltaYaw) {
         double odomNoise1, odomNoise2, odomNoise3, odomNoise4;
         getOdomNoises(&odomNoise1, &odomNoise2, &odomNoise3, &odomNoise4);

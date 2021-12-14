@@ -40,20 +40,20 @@ private:
     int maxLikelihoodParticleIdx_;
     // パーティクル群
     std::vector<Particle> particles_;
-    // MCLにより推定された位置
+    // MCL により推定された位置
     Pose mclPose_;
 
     // 観測モデルで計算された各パーティクルの尤度
     std::vector<double> measurementLikelihoods_;
 
-    // ビームモデルを用いた棄却法を持ちるかどうか
+    // ビームモデルを用いた棄却法を用いるかどうか
     bool useScanRejection_;
 
     // 各スキャン点が未知障害物である確率
-    // 動的障害物の棄却使用時，まやはクラス条件付き観測モデル使用時のみ利用可能
+    // 動的障害物の棄却使用時，またはクラス条件付き観測モデル使用時のみ利用可能
     std::vector<double> unknownScanProbs_;
 
-    // 動作モデルによりパーティクル群を更新させる際に使われるパラメータ
+    // 動作モデルによりパーティクル群を更新させる際に使用されるパラメータ
     double odomNoise1_, odomNoise2_, odomNoise3_, odomNoise4_;
 
     // 観測モデルのタイプ
@@ -554,7 +554,7 @@ public:
         }
     }
 
-    // 与えられた姿勢poseを基に残差を計算
+    // 与えられた姿勢pose を基に残差を計算
     // 返されるベクトルのサイズはスキャン点の数と同じ
     // 残差は基本正の値であり，有効でない点に対応する残差を表現するために-1.0を代入している
     std::vector<double> getResidualErrors(Pose pose, Scan scan) {
@@ -578,7 +578,7 @@ public:
         return residualErrors;
     }
 
-    // 与えられたパーティクル群particlesに対して観測モデルを用いた尤度計算を行う
+    // 与えられたパーティクル群particles に対して観測モデルを用いた尤度計算を行う
     std::vector<double> calculateMeasurementModelForGivenParticles(std::vector<Particle> particles, Scan scan) {
         std::vector<double> likelihoods;
         for (size_t i = 0; i < particles.size(); i++) {
@@ -594,17 +594,17 @@ public:
         return likelihoods;
     }
 
-    // MCLによる推定位置を端末に表示
+    // MCL による推定位置を端末に表示
     void printMCLPose(void) {
         std::cout << "MCL Pose: x = " << mclPose_.getX() << " [m], y = " << mclPose_.getY() << " [m], yaw = " << mclPose_.getYaw() * 180.0 / M_PI << " [deg]" << std::endl;
     }
 
-    // MCLにより推定されたパラメータを端末に表示
+    // MCL により推定されたパラメータを端末に表示
     void printEvaluationParameters(void) {
         std::cout << "Likelihood: total = " << totalLikelihood_ << ", average = " << averageLikelihood_ << ", ess = " << effectiveSampleSize_ << std::endl;
     }
 
-    // MCLによる推定位置をファイルに記録
+    // MCL による推定位置をファイルに記録
     void writeMCLTrajectory(void) {
         static FILE *fp;
         if (fp == NULL)
@@ -612,7 +612,7 @@ public:
         fprintf(fp, "%lf %lf %lf\n", mclPose_.getX(), mclPose_.getY(), mclPose_.getYaw());
     }
 
-    // MCLの結果をgnuplotで表示
+    // MCL の結果をgnuplot で表示
     void plotMCLWorld(double plotRange, Scan scan) {
         static FILE *gp;
         FILE *fp;
@@ -733,7 +733,7 @@ public:
         fflush(gp);
     }
 
-    // MCLとE2Eを融合した結果の表示
+    // MCL とE2E を融合した結果の表示
     void plotE2EFusionWorld(double plotRange, Scan scan, std::vector<Particle> e2eParticles) {
         static FILE *gp;
         FILE *fp;
@@ -784,7 +784,7 @@ public:
         }
         fclose(fp);
 
-        // E2Eで生成されたパーティクル群の書き出し
+        // E2E で生成されたパーティクル群の書き出し
         fp = fopen("/tmp/e2e_particles.txt", "w");
         for (size_t i = 0; i < e2eParticles.size(); i++) {
             double axesLength = 1.0;

@@ -40,8 +40,8 @@ private:
     int samplingNum_;
     // 残差の解像度
     double residualErrorReso_;
-    // 位置推定に失敗していると判断するミスマッチ率の閾値
-    double misalignmentRatioThreshold_;
+    // 位置推定に失敗していると判断するミスマッチ，未知観測率の閾値
+    double misalignmentRatioThreshold_, unknownRatioThreshold_;
     // 隠れ変数間の遷移行列
     std::vector<double> transitionProbMat_;
 
@@ -135,7 +135,7 @@ private:
     }
 
     // 隠れ変数の事後分布を推定
-    std::vector<std::vector<double> > estimateMeasurementClassProbabilities(std::vector<std::vector<double> > likelihoodVectors) {
+    std::vector<std::vector<double> > estimateMeasurementClassProbabilities(std::vector<std::vector<double>> likelihoodVectors) {
         // 全ての潜在変数が繋がっている変数からのメッセージを受け取ることで，周辺事後分布を初期化する
         std::vector<std::vector<double> > measurementClassProbabilities = likelihoodVectors;
         for (int i = 0; i < (int)measurementClassProbabilities.size(); i++) {
@@ -185,9 +185,7 @@ private:
     }
 
     // 位置推定に失敗している確率の計算（厳密計算は困難なのでサンプリングで近似計算）
-    double predictFailureProbabilityBySampling(
-            std::vector<std::vector<double> > measurementClassProbabilities)
-    {
+    double predictFailureProbabilityBySampling(std::vector<std::vector<double>> measurementClassProbabilities) {
         int failureCnt = 0;
         for (int i = 0; i < samplingNum_; i++) {
             int misalignedNum = 0, validMeasurementNum = 0;
@@ -199,13 +197,14 @@ private:
                 if (darts > validProb)
                     continue;
                 validMeasurementNum++;
-                // 正対応（ALIGNED ）より確率が高い場合は誤対応（MISALIGNED ）となる
+                // 正対応（ALIGNED）より確率が高い場合は誤対応（MISALIGNED）となる
                 if (darts > measurementClassProbabilities[j][ALIGNED])
                     misalignedNum++;
             }
             double misalignmentRatio = (double)misalignedNum / (double)validMeasurementNum;
-            // ミスマッチ率が閾値を超えた場合を推定に失敗した状況としてカウント
-            if (misalignmentRatio >= misalignmentRatioThreshold_)
+            double unknownRatio = (double)(measurementNum - validMeasurementNum) / (double)measurementNum;
+            // ミスマッチ，未知観測率のどちらかが閾値を超えた場合を推定に失敗した状況としてカウント
+            if (misalignmentRatio >= misalignmentRatioThreshold_ || unknownRatio >= unknownRatioThreshold_)
                 failureCnt++;
         }
         failureProbability_ = (double)failureCnt / (double)samplingNum_;
@@ -215,8 +214,8 @@ private:
     // 各スキャン点に対する事後分布をセット
     void setAllMeasurementClassProbabilities(std::vector<double> residualErrors, std::vector<std::vector<double> > measurementClassProbabilities) {
         measurementClassProbabilities_.resize((int)residualErrors.size());
-        int idx = 0;
-        for (int i = 0; i < (int)measurementClassProbabilities_.size(); i++) {
+        int idx = 0, size = (int)measurementClassProbabilities_.size();
+        for (int i = 0; i < size; i++) {
             measurementClassProbabilities_[i].resize(3);
             if (0.0 <= residualErrors[i] && residualErrors[i] <= maxResidualError_) {
                 measurementClassProbabilities_[i] = measurementClassProbabilities[idx];
@@ -232,14 +231,15 @@ private:
 public:
     MRFFD():
         NDMean_(0.0),
-        NDVar_(0.15 * 0.15),
-        EDLambda_(4.5),
+        NDVar_(0.04),
+        EDLambda_(2.0),
         maxResidualError_(1.0),
-        residualErrorReso_(0.05),
+        residualErrorReso_(0.01),
         minValidResidualErrorNum_(10),
         maxLPBComputationNum_(1000),
         samplingNum_(1000),
-        misalignmentRatioThreshold_(0.1)
+        misalignmentRatioThreshold_(0.1),
+        unknownRatioThreshold_(0.7)
     {
         NDnormConst_ = 1.0 / sqrt(2.0 * M_PI * NDVar_);
 
@@ -260,6 +260,7 @@ public:
     inline void setMaxLPBComputationNum(int maxLPBComputationNum) { maxLPBComputationNum_ = maxLPBComputationNum; }
     inline void setSamplingNum(int samplingNum) { samplingNum_ = samplingNum; }
     inline void setMisalignmentRatioThreshold(double misalignmentRatioThreshold) { misalignmentRatioThreshold_ = misalignmentRatioThreshold; }
+    inline void setUnknownRatioThreshold(double unknownRatioThreshold) { unknownRatioThreshold_ = unknownRatioThreshold; }
     inline void setTransitionProbMat(std::vector<double> transitionProbMat) { transitionProbMat_ = transitionProbMat; }
 
     inline double getFailureProbability(void) { return failureProbability_; }

@@ -1,19 +1,16 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 project(ALSEdu)
 
-# find_package(OpenMP REQUIRED)
-# if(OpenMP_FOUND)
-#     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-#     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-# endif()
-
 find_package(OpenCV REQUIRED)
 
-# include_directories(${PCL_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} "${PROJECT_SOURCE_DIR}/include" "/usr/local/include" "/usr/include/python3.6")
-# link_directories(${OpenCV_LIBRARY_DIRS} "/usr/lib/python3.6")
-# add_definitions(${OpenCV_DEFINITIONS})
-include_directories(${OpenCV_INCLUDE_DIRS} "${PROJECT_SOURCE_DIR}/include" "/usr/local/include")
+include_directories(
+  ${OpenCV_INCLUDE_DIRS}
+  "${PROJECT_SOURCE_DIR}/include"
+  "/usr/local/include"
+)
+
 link_directories(${OpenCV_LIBRARY_DIRS})
+
 add_definitions(${OpenCV_DEFINITIONS})
 
 set(CMAKE_BUILD_TYPE "Release")

@@ -9,9 +9,9 @@
  * @author Naoki Akai
  ****************************************************************************/
 
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <iostream>
 #include <RobotSim.h>
 #include <MCL.h>
@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 
     mcl.useAdaBoostClassifier();
     // mcl.useMLPClassifier();
-    mcl.useMAEClassifier();
+    // mcl.useMAEClassifier();
 
     double usleepTime = (1.0 / simulationHz) * 10e5;
     while (!robotSim.getKillFlag()) {
@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
         double deltaDist = linearVel * (1.0 / simulationHz);
         double deltaYaw = angularVel * (1.0 / simulationHz);
 
-        // 信頼度付きMCLの実行
+        // 信頼度付きMCL の実行
         mcl.updateParticlesAndReliability(deltaDist, deltaYaw);
         mcl.calculateMeasurementModel(scan);
         mcl.calculateDecisionModel(scan);

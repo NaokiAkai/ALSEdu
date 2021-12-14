@@ -59,6 +59,8 @@ private:
         std::vector<double> maes;
         for (size_t i = 0; i < residualErrors.size(); i++) {
             double mae = getMAE(residualErrors[i]);
+            if (mae < 0.0)
+                continue;
             maes.push_back(mae);
         }
         *mean = getMean(maes);
@@ -100,7 +102,7 @@ public:
             }
         }
         if (num == 0)
-            return 0.0;
+            return -1.0;
         else
             return sum / (double)num;
     }
@@ -128,6 +130,8 @@ public:
         truePositiveNum_ = falseNegativeNum_ = falsePositiveNum_ = trueNegativeNum_ = 0;
         for (size_t i = 0; i < testSuccessResidualErrors.size(); i++) {
             double mae = getMAE(testSuccessResidualErrors[i]);
+            if (mae < 0.0)
+                continue;
             fprintf(fpPositive, "%lf\n", mae);
             if (mae <= failureThreshold_) {
                 truePositiveNum_++;
@@ -139,6 +143,8 @@ public:
         }
         for (size_t i = 0; i < testFailureResidualErrors.size(); i++) {
             double mae = getMAE(testFailureResidualErrors[i]);
+            if (mae < 0.0)
+                continue;
             fprintf(fpNegative, "%lf\n", mae);
             if (mae <= failureThreshold_) {
                 falsePositiveNum_++;
@@ -205,6 +211,9 @@ public:
     }
 
     double calculateDecisionModel(double mae, double *reliability) {
+        if (mae < 0.0)
+            return 10.0e-6;
+
         double pSuccess, pFailure;
         if (mae < failureThreshold_) {
             pSuccess = truePositiveMAEHistogram_.getProbability(mae);

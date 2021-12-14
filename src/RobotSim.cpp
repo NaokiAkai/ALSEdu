@@ -9,9 +9,9 @@
  * @author Naoki Akai
  ****************************************************************************/
 
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <iostream>
 #include <RobotSim.h>
 
@@ -23,18 +23,18 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-    // gnuplotで描画する範囲を指定
+    // gnuplot で描画する範囲を指定
     double plotRange = 10.0;
     // オドメトリ（誤差修正されていない位置）をプロット
     bool plotOdomPose = true;
-    // falseだとノイズの加算されたスキャンデータがプロットされる
+    // false だとノイズの加算されたスキャンデータがプロットされる
     bool plotGTScan = true;
     // シミュレーションの更新の速さ
     double simulationHz = 10.0;
 
     // シミュレーション用のクラス
     als::RobotSim robotSim(argv[1], simulationHz);
-    // 受け取ったkeyの値を端末に表示
+    // 受け取ったkey の値を端末に表示
     robotSim.setPrintKeyValue(true);
 
     // キー入力を受け付けるためにOpenCV のウインドウを用いる
@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
         robotSim.updateSimulation();
         // ロボットの位置（真値）を端末に表示
         robotSim.printRobotPose();
-        // gnuplotで表示
+        // gnuplot で表示
         robotSim.plotSimulationWorld(plotRange, plotOdomPose, plotGTScan);
         usleep(usleepTime);
     }

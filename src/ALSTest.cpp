@@ -9,9 +9,9 @@
  * @author Naoki Akai
  ****************************************************************************/
 
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <iostream>
 #include <RobotSim.h>
 #include <MCL.h>
