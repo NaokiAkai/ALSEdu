@@ -208,6 +208,17 @@ public:
         trueNegativeMAEHistogram_ = Histogram(readMAEs(trueNegativeMAEsFilePath), maeHistogramBinWidth_);
         falsePositiveMAEHistogram_ = Histogram(readMAEs(falsePositiveMAEsFilePath), maeHistogramBinWidth_);
         falseNegativeMAEHistogram_ = Histogram(readMAEs(falseNegativeMAEsFilePath), maeHistogramBinWidth_);
+
+        truePositiveNum_ = lconf["truePositiveNum"].as<int>();
+        falseNegativeNum_ = lconf["falseNegativeNum"].as<int>();
+        trueNegativeNum_ = lconf["trueNegativeNum"].as<int>();
+        falsePositiveNum_ = lconf["falsePositiveNum"].as<int>();
+        int positiveNum = truePositiveNum_ + falseNegativeNum_;
+        int negativeNum = trueNegativeNum_ + falsePositiveNum_;
+        truePositiveMAEHistogram_.multiplyCoefficient((double)truePositiveNum_ / (double)positiveNum);
+        falseNegativeMAEHistogram_.multiplyCoefficient((double)falseNegativeNum_ / (double)positiveNum);
+        trueNegativeMAEHistogram_.multiplyCoefficient((double)trueNegativeNum_ / (double)negativeNum);
+        falsePositiveMAEHistogram_.multiplyCoefficient((double)falsePositiveNum_ / (double)negativeNum);
     }
 
     double calculateDecisionModel(double mae, double *reliability) {

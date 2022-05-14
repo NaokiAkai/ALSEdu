@@ -74,6 +74,11 @@ public:
         buildHistogram(values);
     }
 
+    void multiplyCoefficient(double coefficient) {
+        for (int i = 0; i < (int)probability_.size(); ++i)
+            probability_[i] *= coefficient;
+    }
+
     inline double getProbability(double value) {
         if (value >= maxValue_)
             value -= binWidth_;
